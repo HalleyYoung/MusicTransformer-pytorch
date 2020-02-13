@@ -73,7 +73,10 @@ class MusicTransformer(torch.nn.Module):
                 decode_array = torch.cat((decode_array, result.unsqueeze(-1)), -1)
             else:
                 pdf = dist.OneHotCategorical(probs=result[:, -1])
+                print("pdf: " + str(pdf))
+                print("pdf shape: " + str(pdf.shape))
                 result = pdf.sample().argmax(-1).unsqueeze(-1)
+                print("result shape: " + str(result.shape))
                 # result = torch.transpose(result, 1, 0).to(torch.int32)
                 decode_array = torch.cat((decode_array, result), dim=-1)
                 result_array = torch.cat((result_array, result), dim=-1)
