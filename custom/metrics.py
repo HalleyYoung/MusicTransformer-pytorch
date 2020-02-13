@@ -69,11 +69,13 @@ class MetricsSet(object):
         return self.forward(input=input, target=target)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor):
-        # return [metric(input, target) for metric in self.metrics]
-        return {
+        print(type(target))
+        return [metric(input[0][0], target) for metric in self.metrics.values()]
+"""
+    return {
             k: metric(input.to(target.device), target)
             for k, metric in self.metrics.items()}
-
+"""
 
 class ParallelMetricSet(MetricsSet):
     def __init__(self, metric_dict: Dict):

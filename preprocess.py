@@ -2,16 +2,28 @@ import pickle
 import os
 import sys
 from progress.bar import Bar
-import utils
 from midi_processor.processor import encode_midi
 
+def find_files_by_extensions(root, exts=[]):
+    def _has_ext(name):
+        if not exts:
+            return True
+        name = name.lower()
+        for ext in exts:
+            if name.endswith(ext):
+                return True
+        return False
+    for path, _, files in os.walk(root):
+        for name in files:
+            if _has_ext(name):
+                yield os.path.join(path, name)
 
 def preprocess_midi(path):
     return encode_midi(path)
 
 
 def preprocess_midi_files_under(midi_root, save_dir):
-    midi_paths = list(utils.find_files_by_extensions(midi_root, ['.mid', '.midi']))
+    midi_paths = list(find_files_by_extensions(midi_root, ['.mid', '.midi']))
     os.makedirs(save_dir, exist_ok=True)
     out_fmt = '{}-{}.data'
 
